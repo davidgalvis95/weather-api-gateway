@@ -38,7 +38,7 @@ public class WeatherApiRouteController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ApiRouteResponse> findApiRoute(@PathVariable final UUID id) {
         return apiRouteService.findApiRoute(id)
-                .map(this::convertApiRouteIntoApiRouteResponse)
+                .map(response -> convertApiRouteIntoApiRouteResponse(response))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 

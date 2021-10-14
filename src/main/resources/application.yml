@@ -2,14 +2,14 @@ server:
   port: 9000
 
 spring:
-  cloud:
-    gateway:
-      routes:
-        - id: location-service
-          uri: http://localhost:8080
-          predicates:
-            - Path=/somepath/* *
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: location-service
+#          uri: http://localhost:8080
+#          predicates:
+#            - Path=/somepath/* *
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/postgres
-    username: weatherapp
+    url: r2dbc:postgresql://localhost:5432/weathergateway
+    username: weatheruser
     password: password
