@@ -13,9 +13,9 @@ public interface ApiRouteService {
 
     Mono<ApiRoute> findApiRoute(UUID id);
 
-    Mono<Void> createApiRoute(CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest);
+    Mono<ApiRoute> createApiRoute(CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest);
 
-    Mono<Void> updateApiRoute(UUID id, CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest);
+    Mono<ApiRoute> updateApiRoute(UUID id, CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest);
 
     Mono<Void> deleteApiRoute(UUID id);
 }

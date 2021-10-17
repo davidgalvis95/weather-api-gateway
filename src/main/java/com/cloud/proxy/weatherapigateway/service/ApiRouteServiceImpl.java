@@ -36,20 +36,20 @@ public class ApiRouteServiceImpl implements ApiRouteService {
         return findAndValidateApiRoute(id);
     }
     @Override
-    public Mono<Void> createApiRoute(CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
+    public Mono<ApiRoute> createApiRoute(CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
         ApiRoute apiRoute = setNewApiRoute(new ApiRoute(), createOrUpdateApiRouteRequest);
         return apiRouteRepository.save(apiRoute)
-                .doOnSuccess(obj -> gatewayRouteService.refreshRoutes())
-                .then();
+                .doOnSuccess(obj -> gatewayRouteService.refreshRoutes());
+//                .then();
     }
     @Override
-    public Mono<Void> updateApiRoute(UUID id,
+    public Mono<ApiRoute> updateApiRoute(UUID id,
                                      CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
         return findAndValidateApiRoute(id)
                 .map(apiRoute -> setNewApiRoute(apiRoute, createOrUpdateApiRouteRequest))
-                .flatMap(apiRouteRepository::save)
-                .doOnSuccess(obj -> gatewayRouteService.refreshRoutes())
-                .then();
+                .flatMap(response -> apiRouteRepository.save(response))
+                .doOnSuccess(obj -> gatewayRouteService.refreshRoutes());
+//                .then();
     }
     @Override
     public Mono<Void> deleteApiRoute(UUID id) {
@@ -64,7 +64,7 @@ public class ApiRouteServiceImpl implements ApiRouteService {
                         new RuntimeException(String.format("Api route with id %s not found", id))));
     }
 
-    private ApiRoute setNewApiRoute(ApiRoute apiRoute,
+    protected ApiRoute setNewApiRoute(ApiRoute apiRoute,
                                     CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
         apiRoute.setPath(createOrUpdateApiRouteRequest.getPath());
         apiRoute.setMethod(createOrUpdateApiRouteRequest.getMethod());

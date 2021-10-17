@@ -38,7 +38,7 @@ public class WeatherApiRouteController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ApiRouteResponse> findApiRoute(@PathVariable final UUID id) {
         return apiRouteService.findApiRoute(id)
-                .map(response -> convertApiRouteIntoApiRouteResponse(response))
+                .map(this::convertApiRouteIntoApiRouteResponse)
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -48,6 +48,7 @@ public class WeatherApiRouteController {
     public Mono<?> createApiRoute(
             @RequestBody @Validated CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
         return apiRouteService.createApiRoute(createOrUpdateApiRouteRequest)
+                .map(this::convertApiRouteIntoApiRouteResponse)
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -58,6 +59,7 @@ public class WeatherApiRouteController {
     public Mono<?> updateApiRoute(@PathVariable final UUID id,
                                   @RequestBody @Validated CreateOrUpdateApiRouteRequest createOrUpdateApiRouteRequest) {
         return apiRouteService.updateApiRoute(id, createOrUpdateApiRouteRequest)
+                .map(this::convertApiRouteIntoApiRouteResponse)
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
