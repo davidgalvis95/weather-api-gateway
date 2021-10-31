@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  r2dbc:
+    url: {DB_URL}
+    password: {DB_PASSWORD}
+    username: {DB_USERNAME}
+#    url: turl
+#    username: tuser
+#    password: tpwd

@@ -3,24 +3,27 @@ package com.cloud.proxy.weatherapigateway.config;
 import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
 import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
-@Data
+
 @Configuration
-@Profile({"!test", "local"})
+@ActiveProfiles("test")
 @EnableR2dbcRepositories
 @EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "spring.r2dbc")
-public class WeatherGatewayDBConfig extends AbstractR2dbcConfiguration {
+public class WeatherGatewayDBTestConfig extends AbstractR2dbcConfiguration {
 
-    private static final int PORT = 5432;
+//    @Autowired
+//    private Environment environment;
 
     private String url;
 
@@ -30,10 +33,9 @@ public class WeatherGatewayDBConfig extends AbstractR2dbcConfiguration {
 
     @Override
     @Bean
-    //TODO create this bean to run in other instances out of localhost
     public ConnectionFactory connectionFactory() {
 
-//        System.setProperty("PORT", Integer.toString(PORT));
+//        System.out.println(Arrays.toString(environment.getActiveProfiles()));
 
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
                 .host((getUrl().split("/")[2]).split(":")[0])
@@ -42,5 +44,29 @@ public class WeatherGatewayDBConfig extends AbstractR2dbcConfiguration {
                 .password(getPassword())
                 .database(getUrl().split("/")[3])
                 .build());
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
