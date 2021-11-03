@@ -30,10 +30,11 @@ public class CustomTestDBContainer extends PostgreSQLContainer<CustomTestDBConta
     @Override
     public void start() {
         super.start();
-        System.setProperty("DB_URL", format("r2dbc:pool:postgresql://%s:%s/%s",
+        System.setProperty("R2DBC_URL", format("r2dbc:pool:postgresql://%s:%s/%s",
                 container.getHost(),
                 container.getFirstMappedPort(),
                 DATABASE_NAME));
+        System.setProperty("JDBC_URL", container.getJdbcUrl());
         System.setProperty("DB_USERNAME", container.getUsername());
         System.setProperty("DB_PASSWORD", container.getPassword());
     }

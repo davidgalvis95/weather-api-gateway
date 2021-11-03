@@ -3,6 +3,14 @@ spring:
     url: r2dbc:postgresql://localhost:5432/weathergateway
     username: weatheruser
     password: password
+  liquibase:
+    url: jdbc:postgresql://localhost:5432/weathergateway
+    driverClassName: org.postgresql.Driver
+    user: weatheruser
+    password: password
+    changeLog: "classpath:db/changelog/main-changelog.yml"
+    dropFirst: false
+    contexts: dev
 
 server:
   port: 9000

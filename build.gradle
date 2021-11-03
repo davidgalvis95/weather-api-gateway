@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.liquibase:liquibase-core:4.5.0'
     implementation 'org.yaml:snakeyaml:1.29'
     implementation 'org.projectlombok:lombok:1.18.18'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 //    implementation 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
@@ -42,6 +44,8 @@ dependencies {
     testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
     testImplementation 'org.testcontainers:junit-jupiter:1.16.2'
     testImplementation 'org.testcontainers:postgresql:1.16.2'
+    testImplementation 'org.jeasy:easy-random:5.0.0'
+
 
 }
 
