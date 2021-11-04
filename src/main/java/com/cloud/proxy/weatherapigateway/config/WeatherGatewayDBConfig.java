@@ -8,19 +8,16 @@ import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
+
 @Data
 @Configuration
-@Profile({"!test", "local"})
 @EnableR2dbcRepositories
 @EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "spring.r2dbc")
 public class WeatherGatewayDBConfig extends AbstractR2dbcConfiguration {
-
-    private static final int PORT = 5432;
 
     private String url;
 
@@ -32,8 +29,6 @@ public class WeatherGatewayDBConfig extends AbstractR2dbcConfiguration {
     @Bean
     //TODO create this bean to run in other instances out of localhost
     public ConnectionFactory connectionFactory() {
-
-//        System.setProperty("PORT", Integer.toString(PORT));
 
         return new PostgresqlConnectionFactory(PostgresqlConnectionConfiguration.builder()
                 .host((getUrl().split("/")[2]).split(":")[0])

@@ -1,5 +1,5 @@
 # main-changelog.yml
 databaseChangeLog:
   - include:
-      file: db/changelog/changelog.test.sql
-      context: dev, test, prod
+      file: db/changelog/changelog.sql
+      context: dev, prod, test

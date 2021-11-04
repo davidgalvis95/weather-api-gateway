@@ -1,6 +1,5 @@
 package com.cloud.proxy.weatherapigateway.config;
 
-import com.cloud.proxy.weatherapigateway.service.ApiRouteService;
 import com.cloud.proxy.weatherapigateway.service.GatewayRouteService;
 import com.cloud.proxy.weatherapigateway.service.GatewayRouteServiceImpl;
 import org.springframework.context.ApplicationEventPublisher;

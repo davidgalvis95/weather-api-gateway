@@ -14,3 +14,6 @@ spring:
     changeLog: "classpath:db/changelog/main-changelog.yml"
     dropFirst: false
     contexts: test
+
+fakeService:
+  uri: ${FAKE_SERVICE_URL}
