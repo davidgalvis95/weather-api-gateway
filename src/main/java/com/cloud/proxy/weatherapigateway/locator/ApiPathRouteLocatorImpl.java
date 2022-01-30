@@ -1,5 +1,6 @@
 package com.cloud.proxy.weatherapigateway.locator;
 
+import com.cloud.proxy.weatherapigateway.exception.RouteNotFoundException;
 import com.cloud.proxy.weatherapigateway.model.ApiRoute;
 import com.cloud.proxy.weatherapigateway.service.ApiRouteService;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class ApiPathRouteLocatorImpl implements RouteLocator {
         final RouteLocatorBuilder.Builder routesBuilder = routeLocatorBuilder.routes();
         return apiRouteService.findApiRoutes()
                 .map(apiRoute -> routesBuilder.route(String.valueOf(apiRoute.getId()), predicateSpec -> setPredicateSpec(apiRoute, predicateSpec)))
+//                .onErrorMap( e -> new RouteNotFoundException())
                 .collectList()
                 .flatMapMany(builders -> routesBuilder.build().getRoutes());
     }

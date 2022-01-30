@@ -49,6 +49,7 @@ public class ApiRouteServiceImpl implements ApiRouteService {
                 .map(apiRoute -> setNewApiRoute(apiRoute, createOrUpdateApiRouteRequest))
                 .flatMap(response -> apiRouteRepository.save(response))
                 .doOnSuccess(obj -> gatewayRouteService.refreshRoutes());
+//                .doOnError(Throwable::printStackTrace);
 //                .then();
     }
     @Override
