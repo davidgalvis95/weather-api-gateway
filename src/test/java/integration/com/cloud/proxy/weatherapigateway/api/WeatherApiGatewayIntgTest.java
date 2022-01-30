@@ -4,16 +4,13 @@ import com.cloud.proxy.weatherapigateway.config.CustomTestDBContainer;
 import com.cloud.proxy.weatherapigateway.model.ApiRoute;
 import com.cloud.proxy.weatherapigateway.model.CreateOrUpdateApiRouteRequest;
 import com.cloud.proxy.weatherapigateway.repository.ApiRouteRepository;
-import com.cloud.proxy.weatherapigateway.service.ApiRouteServiceImpl;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
@@ -24,15 +21,10 @@ import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
-import java.io.ByteArrayInputStream;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import static com.cloud.proxy.weatherapigateway.model.WeatherGatewayApiPath.INTERNAL_API_ROUTES;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -49,8 +41,6 @@ public class WeatherApiGatewayIntgTest {
 
     private static WireMockServer wireMockServer;
 
-    Logger logger = Logger.getLogger(WeatherApiGatewayIntgTest.class.getName());
-
     public static final String FAKE_SERVICE_PATH = "/fake/response";
 
     public static final String FAKE_SERVICE_RESPONSE_PAYLOAD = "{\n\"fakePayload\":{\n\"fakeProp1\":1,\n\"fakeProp2\":2\n}\n}";
@@ -58,10 +48,6 @@ public class WeatherApiGatewayIntgTest {
     public static final String ADDITION_TO_PATH = "/somethingExtra";
 
     public static final String FAKE_SERVICE_UPDATED_RESPONSE_PAYLOAD = "{\n\"fakeUpdatedPayload\":{\n\"fakeUpdatedProp1\":1,\n\"fakeUpdatedProp2\":2\n}\n}";
-
-
-    @Value("${fakeService.uri}")
-    private String urii;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -103,7 +89,7 @@ public class WeatherApiGatewayIntgTest {
 
         final ApiRoute createdRoute = reactiveResponse.getResponseBody().share().blockFirst();
 
-//        //Query the repository and get the ApiRoute by id and compare against the created one
+        //Query the repository and get the ApiRoute by id and compare against the created one
         assertNotNull(createdRoute);
         assertNotNull(Optional.of(createdRoute).map(ApiRoute::getId).orElse(null));
 
@@ -146,7 +132,7 @@ public class WeatherApiGatewayIntgTest {
 
         final ApiRoute createdRoute = reactiveResponse.getResponseBody().share().blockFirst();
 
-//        //Query the repository and get the ApiRoute by id and compare against the created one
+        //Query the repository and get the ApiRoute by id and compare against the created one
         assertNotNull(createdRoute);
         assertNotNull(Optional.of(createdRoute).map(ApiRoute::getId).orElse(null));
 
@@ -168,6 +154,7 @@ public class WeatherApiGatewayIntgTest {
                 .jsonPath("$.fakePayload.fakeProp1").isEqualTo(1)
                 .jsonPath("$.fakePayload.fakeProp2").isEqualTo(2);
 
+        //Update the created route
         final CreateOrUpdateApiRouteRequest updateRequest = CreateOrUpdateApiRouteRequest.builder()
                 .path(FAKE_SERVICE_PATH + ADDITION_TO_PATH)
                 .method(HttpMethod.GET.name())
@@ -183,6 +170,7 @@ public class WeatherApiGatewayIntgTest {
                 .isNoContent()
                 .returnResult(ApiRoute.class);
 
+        //Query the repository to find the updated route
         final ApiRoute updatedRoute = apiRouteRepository.findById(createdRoute.getId()).block();
 
         assertNotNull(updatedRoute);
@@ -222,7 +210,7 @@ public class WeatherApiGatewayIntgTest {
 
         final ApiRoute createdRoute = reactiveResponse.getResponseBody().share().blockFirst();
 
-//        //Query the repository and get the ApiRoute by id and compare against the created one
+        //Query the repository and get the ApiRoute by id and compare against the created one
         assertNotNull(createdRoute);
         assertNotNull(Optional.of(createdRoute).map(ApiRoute::getId).orElse(null));
 
@@ -276,6 +264,7 @@ public class WeatherApiGatewayIntgTest {
                 .jsonPath("$.fakeUpdatedPayload.fakeUpdatedProp1").isEqualTo(1)
                 .jsonPath("$.fakeUpdatedPayload.fakeUpdatedProp2").isEqualTo(2);
 
+        //Delete the existing route
         webTestClient.delete()
                 .uri(INTERNAL_API_ROUTES + "/" + createdRoute.getId())
                 .header(ACCEPT, APPLICATION_JSON_VALUE)
